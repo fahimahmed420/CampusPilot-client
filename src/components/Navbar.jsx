@@ -8,6 +8,7 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [nameVisible, setNameVisible] = useState(false); // For mobile name display
     const [dropdownOpen, setDropdownOpen] = useState(false); // For desktop
+    console.log(user);
 
     const getInitials = (name) => {
         if (!name) return "U";

@@ -1,5 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Home, Calendar, DollarSign, Book, HelpCircle } from "lucide-react";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoHomeOutline } from "react-icons/io5";
 import { useAuth } from "../Auth/AuthContext";
 
 export default function DashboardLayout() {
@@ -21,8 +23,8 @@ export default function DashboardLayout() {
                 {/* Logo / Brand */}
                 <div className="flex items-center gap-2 px-6 py-6 text-lg font-semibold border-b border-gray-700">
                     <Link to="/" className="flex items-center gap-2 hover:opacity-80">
-                        <span className="text-2xl">🎓</span>
-                        <span>Campus Pilot</span>
+                        <IoHomeOutline className="flex md:hidden" /> <IoMdArrowRoundBack />
+                        <span className="hidden md:flex">Back To Home</span>
                     </Link>
                 </div>
 
