@@ -7,7 +7,7 @@ export default function Navbar({ user }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <div className="sticky top-0 z-50 bg-black/70 backdrop-blur-md shadow-md transition-all duration-300">
+        <div className="sticky top-0 z-50 bg-black shadow-md transition-all duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
 
