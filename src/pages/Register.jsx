@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../Auth/AuthContext";
 import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { updateProfile } from "firebase/auth";
 
 export default function Register() {
   const { signUp, loginWithGoogle, loading } = useAuth();
@@ -12,22 +15,43 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [photoURL, setPhotoURL] = useState(""); // optional photo
+  const [photoURL, setPhotoURL] = useState(""); 
   const [error, setError] = useState("");
+  const [passwordValid, setPasswordValid] = useState(false);
+
+  // Real-time password validation
+  useEffect(() => {
+    const regex = /^(?=.*[A-Z])(?=.*[\d!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    setPasswordValid(regex.test(password));
+  }, [password]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (!passwordValid) {
+      setError(
+        "Password must be at least 8 characters, include 1 uppercase letter and 1 number or special character"
+      );
+      return;
+    }
+
     try {
-      const user = await signUp(email, password);
-      // Update displayName and photoURL
+      const user = await signUp(email, password); // returns user object
+
       if (name || photoURL) {
-        user.updateProfile({
+        await updateProfile(user, {
           displayName: name,
           photoURL: photoURL || null,
         });
       }
-      navigate("/"); // Redirect after signup
+
+      toast.success("Registration successful! Redirecting to login...", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      setTimeout(() => navigate("/auth/login"), 2000);
     } catch (err) {
       setError(err.message);
     }
@@ -37,7 +61,11 @@ export default function Register() {
     setError("");
     try {
       await loginWithGoogle();
-      navigate("/"); // Redirect after signup
+      toast.success("Google login successful! Redirecting to home...", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setError(err.message);
     }
@@ -45,7 +73,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden text-white">
-      {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-r from-purple-900 via-black to-blue-900 animate-gradient bg-[length:400%_400%]" />
       <div className="absolute inset-0 bg-black/70" />
 
@@ -95,9 +122,20 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+              className={`w-full px-4 py-3 rounded-xl bg-gray-800 text-white border ${
+                password.length > 0
+                  ? passwordValid
+                    ? "border-green-500"
+                    : "border-red-500"
+                  : "border-gray-700"
+              } focus:ring-2 focus:ring-blue-500 outline-none`}
               placeholder="Enter your password"
             />
+            {password.length > 0 && !passwordValid && (
+              <p className="text-red-400 text-sm mt-1">
+                Must be 8+ chars, 1 uppercase, 1 number/special char
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-300 mb-1">Photo URL (optional)</label>
@@ -146,6 +184,9 @@ export default function Register() {
           </p>
         </div>
       </motion.div>
+
+      {/* Toast container */}
+      <ToastContainer />
     </div>
   );
 }

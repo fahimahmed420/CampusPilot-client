@@ -94,5 +94,16 @@ export const AuthProvider = ({ children }) => {
         resetPassword
     };
 
-    return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+    if (loading) {
+        // optional: show spinner or blank screen while auth state is loading
+        return (
+            <div className="min-h-screen flex items-center justify-center text-3xl font-bold">
+                Loading...
+            </div>
+        );
+    }
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+
+
 };
