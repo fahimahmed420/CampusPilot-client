@@ -1,10 +1,22 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router";
+import { useAuth } from "../Auth/AuthContext";
 
-export default function Navbar({ user }) {
+export default function Navbar() {
+    const { user, logout } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [nameVisible, setNameVisible] = useState(false); // For mobile name display
+    const [dropdownOpen, setDropdownOpen] = useState(false); // For desktop
+
+    const getInitials = (name) => {
+        if (!name) return "U";
+        return name
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase();
+    };
 
     return (
         <div className="sticky top-0 z-50 bg-black shadow-md transition-all duration-300">
@@ -22,32 +34,28 @@ export default function Navbar({ user }) {
                     <div className="hidden md:flex items-center space-x-4">
                         {!user ? (
                             <>
-                                <Link
-                                    to={"login"}
-                                    className="group relative cursor-pointer rounded-md border-[0.08em] border-white bg-black px-1 py-0.5 text-[12px]"
-                                >
-                                    <span className="relative bottom-[0.4em] flex px-3 py-1 items-center hover:text-blue-400 justify-center rounded-sm border-[0.08em] border-white bg-black text-[1.5em] text-white shadow-[0_0.4em_0.1em_0.019em_#fff] transition-all duration-1000 group-hover:translate-y-[0.4em] group-hover:shadow-none group-hover:duration-500">
-                                        Login
-                                    </span>
-                                </Link>
-
-                                <Link
-                                    to={"sign-up"}
-                                    className="group relative cursor-pointer rounded-md border-[0.08em] border-white bg-black px-1 py-0.5 text-[12px]"
-                                >
-                                    <span className="relative bottom-[0.4em] flex px-3 py-1 items-center hover:text-blue-400 justify-center rounded-sm border-[0.08em] border-white bg-black text-[1.5em] text-white shadow-[0_0.4em_0.1em_0.019em_#fff] transition-all duration-1000 group-hover:translate-y-[0.4em] group-hover:shadow-none group-hover:duration-500">
-                                        Sign Up
-                                    </span>
-                                </Link>
+                                <Link to="/auth/login" className="text-white px-3 py-1 border border-white rounded hover:text-blue-400">Login</Link>
+                                <Link to="/auth/sign-up" className="text-white px-3 py-1 border border-white rounded hover:text-blue-400">Sign Up</Link>
                             </>
                         ) : (
                             <div className="relative">
-                                <img
-                                    src={user.image || "https://i.pravatar.cc/40"}
-                                    alt="User"
-                                    className="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
-                                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                                />
+                                {user.photoURL ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt="User"
+                                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
+                                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                                    />
+                                ) : (
+                                    <div
+                                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                                        className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full cursor-pointer"
+                                    >
+                                        {getInitials(user.displayName || user.email)}
+                                    </div>
+                                )}
+
+                                {/* Dropdown */}
                                 <AnimatePresence>
                                     {dropdownOpen && (
                                         <motion.div
@@ -55,18 +63,13 @@ export default function Navbar({ user }) {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -10 }}
                                             transition={{ duration: 0.2 }}
-                                            className="absolute right-0 mt-2 w-40 bg-gray-900 text-white shadow-lg rounded-lg py-2"
+                                            className="absolute right-0 mt-2 w-44 bg-gray-900 text-white shadow-lg rounded-lg py-2 backdrop-blur-md bg-opacity-90"
                                         >
-                                            <a
-                                                href="/dashboard"
-                                                className="block px-4 py-2 hover:bg-gray-800"
-                                            >
-                                                Dashboard
-                                            </a>
-                                            <button
-                                                onClick={() => alert("Logout clicked")}
-                                                className="w-full text-left px-4 py-2 hover:bg-gray-800"
-                                            >
+                                            <p className="px-4 py-2 border-b border-gray-700">
+                                                {user.displayName || "User"}
+                                            </p>
+                                            <Link to="/dashboard" className="block px-4 py-2 hover:bg-gray-800">Dashboard</Link>
+                                            <button onClick={logout} className="w-full text-left px-4 py-2 hover:bg-gray-800">
                                                 Logout
                                             </button>
                                         </motion.div>
@@ -77,7 +80,39 @@ export default function Navbar({ user }) {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center">
+                    <div className="md:hidden flex items-center space-x-2">
+                        {user && (
+                            <div className="relative">
+                                {user.photoURL ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt="User"
+                                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
+                                        onClick={() => setNameVisible(!nameVisible)}
+                                    />
+                                ) : (
+                                    <div
+                                        onClick={() => setNameVisible(!nameVisible)}
+                                        className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full cursor-pointer"
+                                    >
+                                        {getInitials(user.displayName || user.email)}
+                                    </div>
+                                )}
+                                <AnimatePresence>
+                                    {nameVisible && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -5 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -5 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute -top-10 right-0 bg-gray-900 px-3 py-1 rounded text-white text-sm shadow-md"
+                                        >
+                                            {user.displayName || "User"}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        )}
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
                             className="text-white focus:outline-none text-2xl"
@@ -100,25 +135,19 @@ export default function Navbar({ user }) {
                     >
                         {!user ? (
                             <>
-                                <button className="block w-full px-4 py-2 text-left rounded-md text-blue-400 border border-blue-400 hover:bg-blue-600 hover:text-white transition">
+                                <Link to="/auth/login" className="block w-full px-4 py-2 text-left rounded-md text-blue-400 border border-blue-400 hover:bg-blue-600 hover:text-white transition">
                                     Log In
-                                </button>
-                                <button className="block w-full px-4 py-2 text-left rounded-md bg-blue-600 text-white hover:bg-blue-700 transition">
+                                </Link>
+                                <Link to="/auth/sign-up" className="block w-full px-4 py-2 text-left rounded-md bg-blue-600 text-white hover:bg-blue-700 transition">
                                     Sign Up
-                                </button>
+                                </Link>
                             </>
                         ) : (
                             <>
-                                <a
-                                    href="/dashboard"
-                                    className="block px-4 py-2 rounded-md text-white hover:bg-gray-800"
-                                >
+                                <Link to="/dashboard" className="block px-4 py-2 rounded-md text-white hover:bg-gray-800">
                                     Dashboard
-                                </a>
-                                <button
-                                    onClick={() => alert("Logout clicked")}
-                                    className="block w-full text-left px-4 py-2 rounded-md text-white hover:bg-gray-800"
-                                >
+                                </Link>
+                                <button onClick={logout} className="block w-full text-left px-4 py-2 rounded-md text-white hover:bg-gray-800">
                                     Logout
                                 </button>
                             </>
