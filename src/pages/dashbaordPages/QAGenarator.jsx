@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useAxios } from "../../hooks/useAxios";
 import { useAuth } from "../../Auth/AuthContext";
@@ -15,8 +15,10 @@ const QAGenerator = () => {
     const [records, setRecords] = useState([]);
     const [scoreSaved, setScoreSaved] = useState(false);
     const [showRecords, setShowRecords] = useState(false);
-    const { user } = useAuth();
+    const [timeElapsed, setTimeElapsed] = useState(0); // timer in seconds
+    const timerRef = useRef(null);
 
+    const { user } = useAuth();
     const axiosInstance = useAxios();
 
     const categories = {
@@ -37,6 +39,7 @@ const QAGenerator = () => {
         setScore(0);
         setAnsweredCount(0);
         setScoreSaved(false);
+        setTimeElapsed(0);
 
         try {
             const res = await fetch(
@@ -60,6 +63,13 @@ const QAGenerator = () => {
                 };
             });
             setQuestions(formatted);
+
+            // Start timer
+            if (timerRef.current) clearInterval(timerRef.current);
+            timerRef.current = setInterval(() => {
+                setTimeElapsed(prev => prev + 1);
+            }, 1000);
+
         } catch (err) {
             toast.error("Failed to load questions.");
             console.error(err);
@@ -76,33 +86,34 @@ const QAGenerator = () => {
         setQuestions(updated);
 
         if (option === updated[qIndex].correct) {
-            setScore((prev) => prev + 1);
+            setScore(prev => prev + 1);
             toast.success("Correct!");
         } else {
             toast.error("Wrong! Correct answer highlighted.");
         }
 
-        setAnsweredCount((prev) => prev + 1);
+        setAnsweredCount(prev => prev + 1);
     };
 
-    // Auto-save score when quiz is finished
+    // Auto-save score when quiz finishes
     useEffect(() => {
-        // Only save if quiz has questions and all answered
         if (questions.length > 0 && answeredCount === questions.length && !scoreSaved) {
             saveScore(questions);
+            if (timerRef.current) clearInterval(timerRef.current);
         }
     }, [answeredCount, questions, scoreSaved]);
 
-    // Save score
+    // Save score with elapsed time
     const saveScore = async (quizQuestions) => {
         try {
-            if (!quizQuestions || quizQuestions.length === 0) return; // prevent undefined
+            if (!quizQuestions || quizQuestions.length === 0) return;
             const res = await axiosInstance.post("/scores", {
                 uid: user.uid,
                 subject,
                 difficulty,
                 score,
-                total: quizQuestions.length, // use the passed questions length
+                total: quizQuestions.length,
+                timeSpent: timeElapsed
             });
             toast.success("Score saved!");
             setScoreSaved(true);
@@ -111,7 +122,6 @@ const QAGenerator = () => {
             console.error("❌ Error saving score:", err);
         }
     };
-
 
     // Toggle records
     const toggleRecords = async () => {
@@ -137,13 +147,23 @@ const QAGenerator = () => {
         setDifficulty("");
         setAmount(5);
         setScoreSaved(false);
+        setTimeElapsed(0);
+        if (timerRef.current) clearInterval(timerRef.current);
+    };
+
+    // Format elapsed time
+    const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60);
+        const s = ('0' + (seconds % 60)).slice(-2);
+        return `${m}:${s}`;
     };
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100 p-6">
             <Toaster position="top-right" />
             <div className="max-w-3xl mx-auto">
-                {/* Headline with history icon */}
+
+                {/* Headline + history toggle */}
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-3xl font-bold text-indigo-400">🎯 QAGenerator</h1>
                     <button
@@ -156,25 +176,41 @@ const QAGenerator = () => {
                 </div>
 
                 {/* Records */}
-                {showRecords && records.length > 0 && (
+                {showRecords && (
                     <div className="mb-6 p-4 bg-gray-800 rounded-lg">
                         <h2 className="text-xl font-bold mb-3">📊 Your Records</h2>
-                        <ul className="space-y-2">
-                            {records.map((r, i) => (
-                                <li
-                                    key={i}
-                                    className="p-2 bg-gray-700 rounded flex justify-between"
-                                >
-                                    <span>
-                                        {r.subject.charAt(0).toUpperCase() + r.subject.slice(1)} (Test {i + 1}) - {new Date(r.date).toLocaleString()}
-                                    </span>
+                        {records.length === 0 ? (
+                            <p className="text-gray-400">You haven't taken any quiz yet.</p>
+                        ) : (
+                            <ul className="space-y-2">
+                                {records.map((r, i) => {
+                                    const minutes = Math.floor((r.timeSpent || 0) / 60);
+                                    const seconds = ('0' + ((r.timeSpent || 0) % 60)).slice(-2);
 
-                                    <span>{r.score}/{r.total}</span>
-                                </li>
-                            ))}
-                        </ul>
+                                    // Set background color based on difficulty
+                                    let bgColor = "bg-gray-700";
+                                    if (r.difficulty === "easy") bgColor = "bg-green-600";
+                                    else if (r.difficulty === "medium") bgColor = "bg-yellow-500";
+                                    else if (r.difficulty === "hard") bgColor = "bg-red-600";
+
+                                    return (
+                                        <li key={i} className={`p-2 rounded flex justify-between ${bgColor}`}>
+                                            <div>
+                                                <span className="font-bold">{r.subject.charAt(0).toUpperCase() + r.subject.slice(1)}</span>{" "}
+                                                (Test {i + 1}) - {new Date(r.date).toLocaleString()} -{" "}
+                                                <span className="italic">{r.difficulty.charAt(0).toUpperCase() + r.difficulty.slice(1)}</span>
+                                            </div>
+                                            <div>
+                                                {r.score}/{r.total} ⏱ {minutes}:{seconds}
+                                            </div>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
                     </div>
                 )}
+
 
                 {/* Quiz Inputs */}
                 <div className="mb-6 p-4 bg-gray-800 rounded-lg shadow-lg space-y-4">
@@ -183,10 +219,10 @@ const QAGenerator = () => {
                         <select
                             className="ml-2 border rounded p-2 bg-gray-700 text-white"
                             value={subject}
-                            onChange={(e) => setSubject(e.target.value)}
+                            onChange={e => setSubject(e.target.value)}
                         >
-                            <option value="">--Choose--</option>
-                            {Object.keys(categories).map((cat) => (
+                            <option value="">Choose</option>
+                            {Object.keys(categories).map(cat => (
                                 <option key={cat} value={cat}>
                                     {cat.charAt(0).toUpperCase() + cat.slice(1)}
                                 </option>
@@ -199,9 +235,9 @@ const QAGenerator = () => {
                         <select
                             className="ml-2 border rounded p-2 bg-gray-700 text-white"
                             value={difficulty}
-                            onChange={(e) => setDifficulty(e.target.value)}
+                            onChange={e => setDifficulty(e.target.value)}
                         >
-                            <option value="">--Choose--</option>
+                            <option value="">Choose</option>
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>
                             <option value="hard">Hard</option>
@@ -214,7 +250,7 @@ const QAGenerator = () => {
                             type="number"
                             className="ml-2 border rounded p-2 w-20 bg-gray-700 text-white"
                             value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={e => setAmount(e.target.value)}
                             min="1"
                             max="20"
                         />
@@ -228,6 +264,11 @@ const QAGenerator = () => {
                     </button>
                 </div>
 
+                {/* Timer */}
+                {questions.length > 0 && (
+                    <p className="text-yellow-300 mb-4">⏱ Time Elapsed: {formatTime(timeElapsed)}</p>
+                )}
+
                 {/* Questions */}
                 {loading && <p>Loading...</p>}
                 {questions.map((q, i) => (
@@ -240,8 +281,7 @@ const QAGenerator = () => {
                                 let btnStyle = "bg-gray-700 hover:bg-gray-600";
                                 if (q.answered) {
                                     if (opt === q.correct) btnStyle = "bg-green-600";
-                                    else if (opt === q.chosen && opt !== q.correct)
-                                        btnStyle = "bg-red-600";
+                                    else if (opt === q.chosen && opt !== q.correct) btnStyle = "bg-red-600";
                                     else btnStyle = "bg-gray-700 opacity-60";
                                 }
                                 return (
@@ -262,7 +302,7 @@ const QAGenerator = () => {
                     <div className="mt-6 p-4 bg-indigo-900 rounded-lg text-center">
                         <h2 className="text-lg font-bold">Quiz Finished 🎉</h2>
                         <p className="mt-2 text-xl text-yellow-300">
-                            Score: {score} / {questions.length}
+                            Score: {score} / {questions.length} ⏱ {formatTime(timeElapsed)}
                         </p>
                         <button
                             onClick={resetQuiz}
@@ -272,6 +312,7 @@ const QAGenerator = () => {
                         </button>
                     </div>
                 )}
+
             </div>
         </div>
     );
