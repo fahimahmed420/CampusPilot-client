@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useAxios } from "../../hooks/useAxios";
 import { useAuth } from "../../Auth/AuthContext";
-import { FaHistory } from "react-icons/fa"; // history icon
+import { FaHistory } from "react-icons/fa";
 
 const QAGenerator = () => {
     const [subject, setSubject] = useState("");
@@ -15,7 +15,7 @@ const QAGenerator = () => {
     const [records, setRecords] = useState([]);
     const [scoreSaved, setScoreSaved] = useState(false);
     const [showRecords, setShowRecords] = useState(false);
-    const [timeElapsed, setTimeElapsed] = useState(0); // timer in seconds
+    const [timeElapsed, setTimeElapsed] = useState(0); 
     const timerRef = useRef(null);
 
     const { user } = useAuth();
