@@ -38,7 +38,7 @@ export default function DashboardLayout() {
 
     const SidebarLinks = () => (
         <nav className="flex-1 px-2 py-6 space-y-1">
-            <NavItem to="/dashboard/dashboardpage" icon={<Home size={18} />} label="Dashboard" />
+            <NavItem to="/dashboard/home" icon={<Home size={18} />} label="Dashboard" />
             <NavItem to="/dashboard/schedule" icon={<Calendar size={18} />} label="Class Schedule" />
             <NavItem to="/dashboard/budget" icon={<DollarSign size={18} />} label="Budget Tracker" />
             <NavItem to="/dashboard/planner" icon={<Book size={18} />} label="Study Planner" />

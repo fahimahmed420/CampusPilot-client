@@ -6,9 +6,11 @@ import learningAnimation from "../assets/Learning.json";
 import TimeManagement from "../assets/Time-management.json";
 import Quiz from "../assets/Quiz.json";
 import FAQ from "../assets/FAQ-web-page.json";
+import { useNavigate } from "react-router";
 
 
 export default function HomePage() {
+    const navigate = useNavigate();
     return (
         <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
 
@@ -37,6 +39,7 @@ export default function HomePage() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="px-6 py-3 bg-blue-600 cursor-pointer text-white rounded-lg shadow hover:bg-blue-700 transition"
+                        onClick={() => navigate("/dashboard/home")}
                     >
                         Get Started
                     </motion.button>
@@ -131,7 +134,7 @@ export default function HomePage() {
                     className="flex-1 space-y-6 text-end"
                 >
                     <h2 className="text-3xl font-bold">
-                       Unique Feature: Smart Study Reminders
+                        Unique Feature: Smart Study Reminders
                     </h2>
                     <p className="text-gray-600 dark:text-gray-300">
                         Never miss your study goals! Campus Pilot sends you reminders before
@@ -139,6 +142,7 @@ export default function HomePage() {
                         and workload.
                     </p>
                     <motion.button
+                        onClick={() => navigate("/dashboard/planner")}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="px-6 py-3 bg-blue-600 cursor-pointer text-white rounded-lg shadow hover:bg-blue-700 transition"
@@ -166,12 +170,13 @@ export default function HomePage() {
                             progress tracking to keep you motivated.
                         </p>
                         <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-6 py-3 bg-blue-600 cursor-pointer text-white rounded-lg shadow hover:bg-blue-700 transition"
-                    >
-                        Start a Quiz
-                    </motion.button>
+                            onClick={() => navigate("/dashboard/qa")}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-6 py-3 bg-blue-600 cursor-pointer text-white rounded-lg shadow hover:bg-blue-700 transition"
+                        >
+                            Start a Quiz
+                        </motion.button>
                     </motion.div>
 
                     {/* Illustration */}

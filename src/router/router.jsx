@@ -11,6 +11,7 @@ import ClassSchedule from "../pages/dashbaordPages/ClassSchedule";
 import BudgetTracker from "../pages/dashbaordPages/BudgetTracker";
 import StudyPlanner from "../pages/dashbaordPages/StudyPlanner";
 import QAGenarator from "../pages/dashbaordPages/QAGenarator";
+import PrivateRoute from "../routes/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +31,9 @@ const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
     children: [
-      { path: "dashboardpage", element: <DashboardPage /> },
+      { path: "home", element:<DashboardPage /> },
       { path: "schedule", element: <ClassSchedule /> },
       { path: "budget", element: <BudgetTracker /> },
       { path: "planner", element: <StudyPlanner /> },
