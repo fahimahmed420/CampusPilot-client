@@ -80,11 +80,10 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`sticky top-0 z-50 transition-all duration-300 ${
-                isScrolled
+            className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
                     ? "bg-black/90  backdrop-blur-md shadow-md"
                     : "bg-transparent dark:bg-transparent"
-            }`}
+                }`}
             aria-label="Main Navigation"
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -170,13 +169,15 @@ export default function Navbar() {
                         )}
 
                         {/* Theme Toggle Button */}
-                        <button
-                            onClick={toggleTheme}
-                            aria-label="Toggle Theme"
-                            className="text-white dark:text-gray-200 hover:scale-110 transition transform duration-300"
+                        <label
+                            class="relative inline-block h-8 w-14 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-gray-900"
                         >
-                            {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
-                        </button>
+                            <input class="peer sr-only" id="AcceptConditions" type="checkbox" />
+                            <span
+                                class="absolute inset-y-0 start-0 m-1 size-6 rounded-full bg-gray-300 ring-[6px] ring-inset ring-white transition-all peer-checked:start-8 peer-checked:w-2 peer-checked:bg-white peer-checked:ring-transparent"
+                            ></span>
+                        </label>
+
                     </div>
 
                     {/* Mobile Menu Button */}
