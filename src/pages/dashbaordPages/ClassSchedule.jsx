@@ -80,7 +80,7 @@ export default function ClassSchedule() {
         <h1 className="text-2xl sm:text-3xl font-bold">Class Schedule Tracker</h1>
         <button
           onClick={() => setIsOpen(true)}
-          className="px-4 py-2 w-full sm:w-auto rounded-2xl bg-purple-600 hover:bg-purple-700 shadow-lg"
+          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl w-full sm:w-auto transition transform hover:scale-[1.02] active:scale-100 shadow-md"
         >
           + Add Class
         </button>

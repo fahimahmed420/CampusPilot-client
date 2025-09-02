@@ -110,9 +110,9 @@ const StudyPlanner = () => {
         <h1 className="text-2xl sm:text-3xl font-bold">Study Planner</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded text-white"
+          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl w-full sm:w-auto transition transform hover:scale-[1.02] active:scale-100 shadow-md"
         >
-          <Plus size={16} /> Add Task / Subject
+           Add Task / Subject
         </button>
       </div>
 
@@ -124,46 +124,65 @@ const StudyPlanner = () => {
         <div className="flex items-center gap-1"><span className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-600 rounded-sm"></span> Completed</div>
         <div className="flex items-center gap-1"><span className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-700 rounded-sm"></span> Class</div>
       </div>
+
       {/* Weekly Calendar */}
-      <div className="rounded-xl bg-black p-4  mb-10">
+      <div className="mb-12">
         <h2 className="text-lg font-semibold mb-4 text-center sm:text-left">Weekly Calendar</h2>
-        <div className="overflow-x-auto">
-          <div className="grid grid-cols-7 gap-4 min-w-[700px] text-center font-bold text-sm bg-gray-800 rounded-lg p-2 sticky top-0 z-10">
-            {daysOfWeek.map((day) => (
-              <div key={day} className="text-blue-400">{day}</div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-4 min-w-[700px] mt-4">
-            {daysOfWeek.map((day) => (
-              <div key={day} className="bg-gray-800 rounded-lg p-3 min-h-[150px] shadow-inner">
-                {[...tasks.filter(t => t.day === day), ...classes.filter(c => c.day === day)]
-                  .sort((a, b) => {
-                    const toMinutes = (t) => { const [h, m] = t.time.split(":").map(Number); return h * 60 + m; };
-                    return toMinutes(a) - toMinutes(b);
-                  })
-                  .map((item) => (
-                    <div key={item.id} className={`p-2 mb-2 rounded text-white text-xs shadow ${item.status ? item.status === "Completed" ? "bg-gray-600" : item.priority === "High" ? "bg-red-500" : item.priority === "Medium" ? "bg-yellow-500" : "bg-green-500" : item.color || "bg-blue-700"}`}>
-                      {item.subject} {item.teacher ? `(${item.teacher})` : ""} <br />
-                      <span className="text-[10px] opacity-80">{item.time}</span>
-                    </div>
-                  ))}
-              </div>
-            ))}
-          </div>
+
+        {/* Header row: only visible on md+ screens */}
+        <div className="hidden md:grid grid-cols-7 gap-4 text-center font-bold text-sm bg-gray-800 rounded-lg p-2">
+          {daysOfWeek.map((day) => (
+            <div key={day} className="text-blue-400">{day}</div>
+          ))}
+        </div>
+
+        {/* Day columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mt-4">
+          {daysOfWeek.map((day) => (
+            <div key={day} className="bg-gray-800 rounded-lg p-3 min-h-[150px] shadow-inner">
+              {/* Day name: visible only on small screens */}
+              <div className="md:hidden font-bold text-blue-400 mb-2">{day}</div>
+
+              {[...tasks.filter(t => t.day === day), ...classes.filter(c => c.day === day)]
+                .sort((a, b) => {
+                  const toMinutes = (t) => { const [h, m] = t.time.split(":").map(Number); return h * 60 + m; };
+                  return toMinutes(a) - toMinutes(b);
+                })
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className={`p-2 mb-2 rounded text-white text-xs shadow ${item.status
+                      ? item.status === "Completed"
+                        ? "bg-gray-600"
+                        : item.priority === "High"
+                          ? "bg-red-500"
+                          : item.priority === "Medium"
+                            ? "bg-yellow-500"
+                            : "bg-green-500"
+                      : item.color || "bg-blue-700"
+                      }`}
+                  >
+                    {item.subject} {item.teacher ? `(${item.teacher})` : ""} <br />
+                    <span className="text-[10px] opacity-80">{item.time}</span>
+                  </div>
+                ))}
+            </div>
+          ))}
         </div>
       </div>
 
+
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 text-center">
-        <div className="p-3 sm:p-4 rounded-xl bg-gray-800">
+      <div className="flex justify-between gap-2 sm:gap-4 mb-6 text-center">
+        <div className="p-3 sm:p-4 rounded-xl bg-gray-800 w-full">
           <p className="text-xs sm:text-sm">Total</p>
           <h2 className="text-xl sm:text-2xl font-bold">{totalTasks}</h2>
         </div>
-        <div className="p-3 sm:p-4 rounded-xl bg-gray-800">
+        <div className="p-3 sm:p-4 rounded-xl bg-gray-800 w-full">
           <p className="text-xs sm:text-sm">Completed</p>
           <h2 className="text-xl sm:text-2xl font-bold text-green-400">{completedTasks}</h2>
         </div>
-        <div className="p-3 sm:p-4 rounded-xl bg-gray-800">
+        <div className="p-3 sm:p-4 rounded-xl bg-gray-800 w-full">
           <p className="text-xs sm:text-sm">Pending</p>
           <h2 className="text-xl sm:text-2xl font-bold text-red-400">{pendingTasks}</h2>
         </div>
@@ -177,7 +196,7 @@ const StudyPlanner = () => {
           tasks.map((task) => (
             <div
               key={task.id}
-              className="p-4 rounded-xl bg-gray-800 flex justify-between items-center shadow hover:shadow-lg transition"
+              className="p-4 rounded-xl bg-gray-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 shadow hover:shadow-lg transition"
             >
               <div>
                 <p className={`font-semibold text-base ${task.status === "Completed" ? "line-through text-gray-400" : ""}`}>
@@ -201,12 +220,10 @@ const StudyPlanner = () => {
         )}
       </div>
 
-
-
       {/* Modal for Adding Subject / Task */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-md w-full relative">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative">
             <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-gray-400 hover:text-white">
               <X size={20} />
             </button>
