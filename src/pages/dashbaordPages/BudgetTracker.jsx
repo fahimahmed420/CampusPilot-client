@@ -6,10 +6,10 @@ import {
 } from "recharts";
 import { useAuth } from "../../Auth/AuthContext";
 import AddTransactionModal from "../../components/AddTransactionModal";
-import { useAxios } from "../../hooks/useAxios"; // your custom Axios hook
+import { useAxios } from "../../hooks/useAxios";
 
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const PIE_COLORS = ["#60A5FA","#34D399","#F59E0B","#EF4444","#A78BFA","#FBBF24","#22D3EE","#F472B6","#10B981","#FCA5A5"];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const PIE_COLORS = ["#60A5FA", "#34D399", "#F59E0B", "#EF4444", "#A78BFA", "#FBBF24", "#22D3EE", "#F472B6", "#10B981", "#FCA5A5"];
 
 export default function BudgetTracker() {
   const { user } = useAuth();
@@ -94,127 +94,172 @@ export default function BudgetTracker() {
   }, [transactions]);
 
   return (
-    <div className="p-6 bg-gray-900 text-white min-h-screen transition">
-      <div className="max-w-6xl mx-auto bg-gray-800 p-6 rounded-2xl shadow-xl transition">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <h1 className="text-3xl font-bold tracking-tight">Budget Tracker</h1>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl transition transform hover:scale-[1.02] active:scale-100 shadow-md"
-          >
-            + Add Transaction
-          </button>
-        </div>
+    <div className="px-4 sm:px-6 lg:px-8 mt-6 max-w-7xl mx-auto text-white min-h-screen transition">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Budget Tracker</h1>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl w-full sm:w-auto transition transform hover:scale-[1.02] active:scale-100 shadow-md"
+        >
+          + Add Transaction
+        </button>
+      </div>
 
-        {/* Totals */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <Card title="Balance" value={balance} accent="text-blue-400" />
-          <Card title="Income" value={income} accent="text-green-400" />
-          <Card title="Expense" value={expense} accent="text-red-400" />
-        </div>
+      {/* Totals */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <Card title="Balance" value={balance} accent="text-blue-400" />
+        <Card title="Income" value={income} accent="text-green-400" />
+        <Card title="Expense" value={expense} accent="text-red-400" />
+      </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Pie */}
-          <div className="p-4 bg-gray-700 rounded-xl flex flex-col items-center justify-center">
-            <h2 className="text-lg font-semibold mb-4">Expenses by Category</h2>
-            {expenseByCat.length === 0 ? (
-              <p className="text-gray-300 py-10">No expenses to show yet</p>
-            ) : (
-              <div className="w-full h-72">
-                <ResponsiveContainer>
-                  <PieChart>
-                    <Pie data={expenseByCat} dataKey="value" nameKey="name" outerRadius={110} label>
-                      {expenseByCat.map((_, i) => (
-                        <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <PieTooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            )}
-          </div>
-
-          {/* Bar */}
-          <div className="p-4 bg-gray-700 rounded-xl">
-            <h2 className="text-lg font-semibold mb-4">Income vs Expense (This Year)</h2>
-            <div className="w-full h-72">
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Pie Chart */}
+        <div className="p-4 bg-gray-700 rounded-xl flex flex-col items-center justify-center">
+          <h2 className="text-base sm:text-lg font-semibold mb-4 text-center">Expenses by Category</h2>
+          {expenseByCat.length === 0 ? (
+            <p className="text-gray-300 py-8 text-center text-sm">No expenses to show yet</p>
+          ) : (
+            <div className="w-full h-64 sm:h-72">
               <ResponsiveContainer>
-                <BarChart data={barData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
-                  <XAxis dataKey="month" stroke="#E5E7EB" />
-                  <YAxis stroke="#E5E7EB" />
-                  <BarTooltip />
-                  <Legend />
-                  <Bar dataKey="Income" fill="#3B82F6" radius={[4,4,0,0]} />
-                  <Bar dataKey="Expense" fill="#EF4444" radius={[4,4,0,0]} />
-                </BarChart>
+                <PieChart>
+                  <Pie
+                    data={expenseByCat}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius="80%"
+                    label
+                  >
+                    {expenseByCat.map((_, i) => (
+                      <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <PieTooltip />
+                </PieChart>
               </ResponsiveContainer>
             </div>
+          )}
+        </div>
+
+        {/* Bar Chart */}
+        <div className="p-4 bg-gray-700 rounded-xl">
+          <h2 className="text-base sm:text-lg font-semibold mb-4 text-center sm:text-left">
+            Income vs Expense (This Year)
+          </h2>
+          <div className="w-full h-64 sm:h-72">
+            <ResponsiveContainer>
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
+                <XAxis dataKey="month" stroke="#E5E7EB" />
+                <YAxis stroke="#E5E7EB" />
+                <BarTooltip />
+                <Legend />
+                <Bar dataKey="Income" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Expense" fill="#EF4444" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Transactions */}
+      <div className="bg-gray-700 p-4 rounded-xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <h2 className="text-base sm:text-lg font-semibold">Transactions</h2>
+          <div className="flex flex-wrap gap-2">
+            {["All", "Income", "Expense"].map((f) => (
+              <button
+                key={f}
+                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === f
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-800 text-gray-200 hover:bg-gray-600"
+                  }`}
+                onClick={() => setFilter(f)}
+              >
+                {f}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Transactions Table */}
-        <div className="bg-gray-700 p-4 rounded-xl">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
-            <h2 className="text-lg font-semibold">Transactions</h2>
-            <div className="inline-flex rounded-xl overflow-hidden border border-gray-600">
-              {["All", "Income", "Expense"].map((f) => (
-                <button
-                  key={f}
-                  className={`px-3 py-1.5 transition ${filter === f ? "bg-blue-500 text-white" : "bg-gray-800 text-gray-200 hover:bg-gray-600"}`}
-                  onClick={() => setFilter(f)}
-                >
-                  {f}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="overflow-x-auto rounded-lg border border-gray-600">
-            <table className="w-full text-left">
-              <thead className="bg-gray-600/70">
+        {/* Responsive Transactions */}
+        <div className="hidden sm:block overflow-x-auto rounded-lg border border-gray-600">
+          <table className="w-full text-left">
+            <thead className="bg-gray-600/70">
+              <tr>
+                <Th>Date</Th>
+                <Th>Category</Th>
+                <Th>Type</Th>
+                <Th className="text-right">Amount</Th>
+                <Th>Notes</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
                 <tr>
-                  <Th>Date</Th>
-                  <Th>Category</Th>
-                  <Th>Type</Th>
-                  <Th className="text-right">Amount</Th>
-                  <Th>Notes</Th>
+                  <td className="p-4 text-center text-gray-300" colSpan={5}>
+                    Loading…
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td className="p-4 text-center text-gray-300" colSpan={5}>Loading…</td></tr>
-                ) : filtered.length === 0 ? (
-                  <tr><td className="p-4 text-center text-gray-300" colSpan={5}>No transactions</td></tr>
-                ) : (
-                  filtered.map((t) => (
-                    <tr key={t._id} className="border-t border-gray-600/70 hover:bg-gray-600 transition">
-                      <Td>{new Date(t.date).toLocaleDateString()}</Td>
-                      <Td>{t.category || "-"}</Td>
-                      <Td className="capitalize">{t.type}</Td>
-                      <Td className="text-right">${Number(t.amount || 0).toFixed(2)}</Td>
-                      <Td>{t.note || "-"}</Td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td className="p-4 text-center text-gray-300" colSpan={5}>
+                    No transactions
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((t) => (
+                  <tr
+                    key={t._id}
+                    className="border-t border-gray-600/70 hover:bg-gray-600 transition"
+                  >
+                    <Td>{new Date(t.date).toLocaleDateString()}</Td>
+                    <Td>{t.category || "-"}</Td>
+                    <Td className="capitalize">{t.type}</Td>
+                    <Td className="text-right">${Number(t.amount || 0).toFixed(2)}</Td>
+                    <Td>{t.note || "-"}</Td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="sm:hidden space-y-3">
+          {loading ? (
+            <p className="text-center text-gray-300">Loading…</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-gray-300">No transactions</p>
+          ) : (
+            filtered.map((t) => (
+              <div
+                key={t._id}
+                className="bg-gray-800 p-4 rounded-lg shadow-md flex flex-col gap-2"
+              >
+                <div className="flex justify-between text-sm">
+                  <span className="font-semibold">{t.category || "Uncategorized"}</span>
+                  <span className="capitalize text-gray-300">{t.type}</span>
+                </div>
+                <div className="text-lg font-bold">${Number(t.amount || 0).toFixed(2)}</div>
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>{new Date(t.date).toLocaleDateString()}</span>
+                  <span>{t.note || "No notes"}</span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
       {/* Modal */}
       {modalOpen && (
-        <AddTransactionModal
-          onClose={() => setModalOpen(false)}
-          onSave={handleAdd}
-        />
+        <AddTransactionModal onClose={() => setModalOpen(false)} onSave={handleAdd} />
       )}
     </div>
   );
+
 }
 
 // Card Component

@@ -109,7 +109,7 @@ const DashboardPage = () => {
     }
 
     return (
-        <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="space-y-6 px-4 sm:px-6 lg:px-8 mt-10 max-w-7xl mx-auto min-h-screen">
             <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center">
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 md:mb-0">
                     Overview

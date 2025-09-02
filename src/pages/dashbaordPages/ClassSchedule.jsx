@@ -51,10 +51,7 @@ export default function ClassSchedule() {
       return;
     }
 
-    const newClass = {
-      ...form,
-      uid: user.uid
-    };
+    const newClass = { ...form, uid: user.uid };
 
     try {
       const res = await axiosInstance.post("/classes", newClass);
@@ -77,12 +74,13 @@ export default function ClassSchedule() {
   const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Class Schedule Tracker</h1>
+    <div className="min-h-screen mt-10 bg-gray-900 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">Class Schedule Tracker</h1>
         <button
           onClick={() => setIsOpen(true)}
-          className="px-4 py-2 rounded-2xl bg-purple-600 hover:bg-purple-700 shadow-lg"
+          className="px-4 py-2 w-full sm:w-auto rounded-2xl bg-purple-600 hover:bg-purple-700 shadow-lg"
         >
           + Add Class
         </button>
@@ -93,7 +91,7 @@ export default function ClassSchedule() {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="bg-gray-800 p-2 rounded-lg"
+          className="bg-gray-800 p-2 rounded-lg w-full sm:w-auto"
         >
           <option>All Subjects</option>
           {[...new Set(classes.map((c) => c.subject))].map((s) => (
@@ -102,50 +100,80 @@ export default function ClassSchedule() {
         </select>
       </div>
 
-      {/* Schedule Grid */}
-      <div className="grid grid-cols-8 border border-gray-700 rounded-lg">
-        <div className="h-12 flex items-center justify-center font-semibold border-r border-b border-gray-700">
-          Time/Day
-        </div>
-        {days.map((day) => (
-          <div
-            key={day}
-            className="h-12 flex items-center justify-center font-semibold border-r border-b border-gray-700"
-          >
-            {day}
-          </div>
-        ))}
-
-        {hours.map((h) => (
-          <React.Fragment key={h}>
-            <div className="h-16 flex items-center justify-center border-r border-b border-gray-700 text-sm">
-              {h}
+      {/* Responsive Schedule */}
+      <div>
+        {/* Desktop Grid */}
+        <div className="hidden md:block overflow-x-auto">
+          <div className="grid grid-cols-8 border border-gray-700 rounded-lg">
+            <div className="h-12 flex items-center justify-center font-semibold border-r border-b border-gray-700">
+              Time/Day
             </div>
             {days.map((day) => (
-              <div key={day + h} className="h-16 relative border-r border-b border-gray-800">
-                {filteredClasses
-                  .filter((c) => c.day === day && c.time === h)
-                  .map((c) => (
-                    <motion.div
-                      key={c._id}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className={`${getRandomColor()} absolute inset-1 rounded-lg shadow-lg p-2 text-xs`}
-                    >
-                      <div className="font-bold">{c.subject}</div>
-                      <div className="text-[11px]">{c.teacher}</div>
-                    </motion.div>
-                  ))}
+              <div
+                key={day}
+                className="h-12 flex items-center justify-center font-semibold border-r border-b border-gray-700 text-sm"
+              >
+                {day}
               </div>
             ))}
-          </React.Fragment>
-        ))}
+
+            {hours.map((h) => (
+              <React.Fragment key={h}>
+                <div className="h-16 flex items-center justify-center border-r border-b border-gray-700 text-xs sm:text-sm">
+                  {h}
+                </div>
+                {days.map((day) => (
+                  <div
+                    key={day + h}
+                    className="h-16 relative border-r border-b border-gray-800"
+                  >
+                    {filteredClasses
+                      .filter((c) => c.day === day && c.time === h)
+                      .map((c) => (
+                        <motion.div
+                          key={c._id}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className={`${getRandomColor()} absolute inset-1 rounded-lg shadow-lg p-2 text-[10px] sm:text-xs`}
+                        >
+                          <div className="font-bold">{c.subject}</div>
+                          <div className="text-[9px] sm:text-[11px]">{c.teacher}</div>
+                        </motion.div>
+                      ))}
+                  </div>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile List View */}
+        <div className="md:hidden space-y-4">
+          {filteredClasses.length === 0 ? (
+            <p className="text-gray-400 text-center">No classes scheduled</p>
+          ) : (
+            filteredClasses.map((c) => (
+              <motion.div
+                key={c._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-4 rounded-lg shadow-md ${getRandomColor()} flex justify-between items-center`}
+              >
+                <div>
+                  <div className="font-bold text-sm">{c.subject}</div>
+                  <div className="text-xs">{c.teacher}</div>
+                </div>
+                <div className="text-xs">{c.day} - {c.time}</div>
+              </motion.div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Add Class Modal */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <h2 className="text-lg font-semibold mb-4">Add Class</h2>
-        <div className="space-y-3">
+        <div className="space-y-3 max-w-sm">
           <input
             type="text"
             placeholder="Class Name"

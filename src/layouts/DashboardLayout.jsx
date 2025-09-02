@@ -61,8 +61,9 @@ export default function DashboardLayout() {
             {/* Main content */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <header className="flex items-center justify-between bg-white dark:bg-black h-16 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
+                <header className="bg-white dark:bg-black ">
+                    <div className="flex items-center justify-between h-16  px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                    <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
                     <div className="relative flex items-center gap-3">
                         {/* Avatar */}
                         <button
@@ -130,10 +131,11 @@ export default function DashboardLayout() {
                             )}
                         </AnimatePresence>
                     </div>
+                </div>
                 </header>
 
                 {/* Children */}
-                <main className="p-6 flex-1 overflow-y-auto">
+                <main className="p-4 flex-1 overflow-y-auto">
                     <Outlet />
                 </main>
             </div>
