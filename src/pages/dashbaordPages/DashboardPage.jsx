@@ -10,12 +10,10 @@ import {
 } from "recharts";
 import { ArrowUpIcon, ArrowDownIcon, RefreshCw, Inbox } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAxios } from "../../hooks/useAxios";
 import { useAuth } from "../../Auth/AuthContext";
 
 const DashboardPage = () => {
-    const axios = useAxios();
-    const { user } = useAuth();
+    const { user, axiosInstance: axios } = useAuth();
 
     const [balance, setBalance] = useState(0);
     const [lastTransaction, setLastTransaction] = useState(null);
@@ -44,8 +42,11 @@ const DashboardPage = () => {
 
 
     useEffect(() => {
-        if (user?.uid) loadData();
-    }, [user]);
+        if (user?.uid && axios.defaults.headers.common["Authorization"]) {
+            loadData();
+        }
+    }, [user, axios]);
+
 
     const loadData = async () => {
         try {
@@ -109,7 +110,7 @@ const DashboardPage = () => {
     }
 
     return (
-        <div className="space-y-6 px-4 sm:px-6 lg:px-8 mt-10 max-w-7xl mx-auto min-h-screen">
+        <div className="p-6 space-y-6 px-4 sm:px-6 lg:px-8 mt-10 max-w-7xl mx-auto min-h-screen">
             <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center">
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 md:mb-0">
                     Overview

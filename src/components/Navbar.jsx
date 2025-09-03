@@ -20,22 +20,8 @@ const dropdownVariants = {
     exit: { opacity: 0, y: -10 },
 };
 
-const nameTagVariants = {
-    hidden: { opacity: 0, y: -5 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -5 },
-};
-
-const mobileMenuVariants = {
-    hidden: { height: 0, opacity: 0 },
-    visible: { height: "auto", opacity: 1 },
-    exit: { height: 0, opacity: 0 },
-};
-
 export default function Navbar() {
     const { user, logout } = useAuth();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [nameVisible, setNameVisible] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [theme, setTheme] = useState("light");
@@ -80,10 +66,11 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-                    ? "bg-black/90  backdrop-blur-md shadow-md"
+            className={`sticky top-0 z-50 transition-all duration-300 ${
+                isScrolled
+                    ? "bg-black/90 backdrop-blur-md shadow-md"
                     : "bg-transparent dark:bg-transparent"
-                }`}
+            }`}
             aria-label="Main Navigation"
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,8 +85,22 @@ export default function Navbar() {
                         <span className="absolute left-8 bottom-0 w-0 h-[2px] bg-gradient-to-r from-blue-400 to-purple-500 group-hover:w-[155px] transition-all duration-500"></span>
                     </Link>
 
-                    {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center space-x-4">
+                    {/* Right Section (Theme + Auth) */}
+                    <div className="flex items-center space-x-4" ref={dropdownRef}>
+                        {/* Theme Toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:scale-110 transition"
+                            aria-label="Toggle Theme"
+                        >
+                            {theme === "light" ? (
+                                <Moon size={20} className="text-white" />
+                            ) : (
+                                <Sun size={20} className="text-yellow-400" />
+                            )}
+                        </button>
+
+                        {/* Auth Buttons or User Dropdown */}
                         {!user ? (
                             <>
                                 <Link
@@ -118,7 +119,7 @@ export default function Navbar() {
                                 </Link>
                             </>
                         ) : (
-                            <div ref={dropdownRef} className="relative dropdown-container">
+                            <div className="relative">
                                 {user.photoURL ? (
                                     <img
                                         src={user.photoURL}
@@ -136,7 +137,7 @@ export default function Navbar() {
                                     </div>
                                 )}
 
-                                {/* Dropdown */}
+                                {/* Dropdown (shared for mobile & desktop) */}
                                 <AnimatePresence>
                                     {dropdownOpen && (
                                         <motion.div
@@ -167,120 +168,9 @@ export default function Navbar() {
                                 </AnimatePresence>
                             </div>
                         )}
-
-                        {/* Theme Toggle Button */}
-                        <label
-                            class="relative inline-block h-8 w-14 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-gray-900"
-                        >
-                            <input class="peer sr-only" id="AcceptConditions" type="checkbox" />
-                            <span
-                                class="absolute inset-y-0 start-0 m-1 size-6 rounded-full bg-gray-300 ring-[6px] ring-inset ring-white transition-all peer-checked:start-8 peer-checked:w-2 peer-checked:bg-white peer-checked:ring-transparent"
-                            ></span>
-                        </label>
-
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center space-x-2">
-                        {/* Theme Toggle for Mobile */}
-                        <button
-                            onClick={toggleTheme}
-                            aria-label="Toggle Theme"
-                            className="text-white dark:text-gray-200 mr-2"
-                        >
-                            {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
-                        </button>
-
-                        {user && (
-                            <div className="relative">
-                                {user.photoURL ? (
-                                    <img
-                                        src={user.photoURL}
-                                        alt="User Avatar"
-                                        title={displayName}
-                                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
-                                        onClick={() => setNameVisible((prev) => !prev)}
-                                    />
-                                ) : (
-                                    <div
-                                        onClick={() => setNameVisible((prev) => !prev)}
-                                        className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full cursor-pointer"
-                                    >
-                                        {getInitials(displayName)}
-                                    </div>
-                                )}
-                                <AnimatePresence>
-                                    {nameVisible && (
-                                        <motion.div
-                                            variants={nameTagVariants}
-                                            initial="hidden"
-                                            animate="visible"
-                                            exit="exit"
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute -top-10 right-0 bg-gray-900 px-3 py-1 rounded text-white text-sm shadow-md"
-                                        >
-                                            {displayName}
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        )}
-                        <button
-                            onClick={() => setMenuOpen((prev) => !prev)}
-                            aria-label="Toggle Mobile Menu"
-                            className="text-white dark:text-gray-200 focus:outline-none text-2xl"
-                        >
-                            ☰
-                        </button>
                     </div>
                 </div>
             </div>
-
-            {/* Mobile Menu */}
-            <AnimatePresence>
-                {menuOpen && (
-                    <motion.div
-                        variants={mobileMenuVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        transition={{ duration: 0.3 }}
-                        className="md:hidden px-4 pb-3 space-y-2 bg-black/95 dark:bg-gray-900/95 backdrop-blur-md shadow-md overflow-hidden transition-colors duration-300"
-                    >
-                        {!user ? (
-                            <>
-                                <Link
-                                    to="/auth/login"
-                                    className="block w-full px-4 py-2 text-left rounded-md text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transition-transform duration-300 hover:scale-105"
-                                >
-                                    Log In
-                                </Link>
-                                <Link
-                                    to="/auth/sign-up"
-                                    className="block w-full px-4 py-2 text-left rounded-md text-white bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition-transform duration-300 hover:scale-105"
-                                >
-                                    Sign Up
-                                </Link>
-                            </>
-                        ) : (
-                            <>
-                                <Link
-                                    to="/dashboard/home"
-                                    className="block px-4 py-2 rounded-md text-white hover:bg-gray-800"
-                                >
-                                    Dashboard
-                                </Link>
-                                <button
-                                    onClick={logout}
-                                    className="block w-full text-left px-4 py-2 rounded-md text-white hover:bg-gray-800"
-                                >
-                                    Logout
-                                </button>
-                            </>
-                        )}
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </nav>
     );
 }

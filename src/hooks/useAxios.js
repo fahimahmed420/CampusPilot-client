@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api"; // change for prod
+const BASE_URL = "https://campuspilot-server.vercel.app/api";
 
 export const useAxios = () => {
   const axiosInstance = useMemo(() => {

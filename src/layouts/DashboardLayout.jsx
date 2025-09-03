@@ -1,15 +1,17 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Home, Calendar, DollarSign, Book, HelpCircle } from "lucide-react";
+import { Home, Calendar, DollarSign, Book, HelpCircle, Moon, Sun } from "lucide-react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useAuth } from "../Auth/AuthContext";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaPaperPlane } from "react-icons/fa";
 
 export default function DashboardLayout() {
     const { user } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const dropdownButtonRef = useRef(null);
+    const [theme, setTheme] = useState("light");
 
     const getInitials = (name) => {
         if (!name) return "U";
@@ -35,6 +37,20 @@ export default function DashboardLayout() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    // Load theme from localStorage
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        setTheme(savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    }, []);
+    // Toggle theme and save to localStorage
+    const toggleTheme = () => {
+        const newTheme = theme === "light" ? "dark" : "light";
+        setTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+        document.documentElement.classList.toggle("dark", newTheme === "dark");
+    };
 
     const SidebarLinks = () => (
         <nav className="flex-1 px-2 py-6 space-y-1">
@@ -63,75 +79,131 @@ export default function DashboardLayout() {
                 {/* Header */}
                 <header className="bg-white dark:bg-black ">
                     <div className="flex items-center justify-between h-16  px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-                    <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
-                    <div className="relative flex items-center gap-3">
-                        {/* Avatar */}
-                        <button
-                            ref={dropdownButtonRef}
-                            onClick={() => setDropdownOpen(!dropdownOpen)}
-                            className="relative">
-                            {user?.photoURL ? (
-                                <img
-                                    src={user.photoURL}
-                                    alt={user.displayName || user.email || "User avatar"}
-                                    className="w-10 h-10 rounded-full cursor-pointer border-2 border-white object-cover"
-                                />
-                            ) : (
-                                <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full cursor-pointer">
-                                    {getInitials(user?.displayName || user?.email || "U")}
-                                </div>
-                            )}
-                        </button>
-                        <label
-                            class="relative inline-block h-8 w-14 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-gray-900"
-                        >
-                            <input class="peer sr-only" id="AcceptConditions" type="checkbox" />
-                            <span
-                                class="absolute inset-y-0 start-0 m-1 size-6 rounded-full bg-gray-300 ring-[6px] ring-inset ring-white transition-all peer-checked:start-8 peer-checked:w-2 peer-checked:bg-white peer-checked:ring-transparent"
-                            ></span>
-                        </label>
+                        <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
+                        <div className="relative flex items-center gap-3">
+                            <button
+                                onClick={toggleTheme}
+                                className="p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:scale-110 transition"
+                                aria-label="Toggle Theme"
+                            >
+                                {theme === "light" ? (
+                                    <Moon size={20} className="text-white" />
+                                ) : (
+                                    <Sun size={20} className="text-yellow-400" />
+                                )}
+                            </button>
+                            {/* Avatar */}
+                            <button
+                                ref={dropdownButtonRef}
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                                className="relative">
+                                {user?.photoURL ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt={user.displayName || user.email || "User avatar"}
+                                        className="w-10 h-10 rounded-full cursor-pointer border-2 border-white object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full cursor-pointer">
+                                        {getInitials(user?.displayName || user?.email || "U")}
+                                    </div>
+                                )}
+                            </button>
 
 
-                        {/* Mobile dropdown menu */}
-                        <AnimatePresence>
-                            {dropdownOpen && (
-                                <motion.div
-                                    ref={dropdownRef}
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="absolute top-3 right-0 mt-12 w-48 bg-white text-black shadow-lg rounded-md z-50 p-2 "
-                                >
-                                    <Link to="/dashboard/dashboardpage" className="flex items-center lg:hidden gap-2 px-3 py-2 hover:bg-gray-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <Home size={18} /> Dashboard Home
-                                    </Link>
-                                    <Link to="/dashboard/schedule" className="flex items-center lg:hidden gap-2 px-3 py-2 hover:bg-gray-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <Calendar size={18} /> Class Schedule
-                                    </Link>
-                                    <Link to="/dashboard/budget" className="flex items-center lg:hidden gap-2 px-3 py-2 hover:bg-gray-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <DollarSign size={18} /> Budget Tracker
-                                    </Link>
-                                    <Link to="/dashboard/planner" className="flex items-center lg:hidden gap-2 px-3 py-2 hover:bg-gray-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <Book size={18} /> Study Planner
-                                    </Link>
-                                    <Link to="/dashboard/qa" className="flex items-center lg:hidden gap-2 px-3 py-2 hover:bg-gray-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <HelpCircle size={18} /> Q&A Genarator
-                                    </Link>
-                                    <Link to="/" className="flex items-center gap-2 px-3 py-2 hover:bg-red-400 rounded-md transition"
-                                        onClick={() => setDropdownOpen(false)}>
-                                        <IoMdArrowRoundBack size={18} /> Logout
-                                    </Link>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                            {/* Mobile dropdown menu */}
+                            <AnimatePresence>
+                                {dropdownOpen && (
+                                    <motion.div
+                                        ref={dropdownRef}
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="absolute top-3 right-0 mt-12 w-48 bg-white space-y-1 text-black shadow-lg rounded-md z-50 p-2"
+                                    >
+                                        <NavLink
+                                            to="/"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-blue-500 text-white" : "hover:bg-blue-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <FaPaperPlane size={18} /> Home
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/dashboard/home"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <Home size={18} /> Dashboard Home
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/dashboard/schedule"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <Calendar size={18} /> Class Schedule
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/dashboard/budget"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <DollarSign size={18} /> Budget Tracker
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/dashboard/planner"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <Book size={18} /> Study Planner
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/dashboard/qa"
+                                            className={({ isActive }) =>
+                                                `flex items-center lg:hidden gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-gray-700 text-white" : "hover:bg-gray-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <HelpCircle size={18} /> Q&A Generator
+                                        </NavLink>
+
+                                        <NavLink
+                                            to="/"
+                                            className={({ isActive }) =>
+                                                `flex items-center gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-red-500 text-white" : "hover:bg-red-400"
+                                                }`
+                                            }
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            <IoMdArrowRoundBack size={18} /> Logout
+                                        </NavLink>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                        </div>
                     </div>
-                </div>
                 </header>
 
                 {/* Children */}

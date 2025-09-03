@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Check, X } from "lucide-react";
-import { useAxios } from "../../hooks/useAxios";
 import { useAuth } from "../../Auth/AuthContext";
 
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const StudyPlanner = () => {
-  const { user } = useAuth();
-  const axios = useAxios();
+  const { user, axiosInstance: axios } = useAuth();
 
   const [tasks, setTasks] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -106,8 +104,8 @@ const StudyPlanner = () => {
   return (
     <div className="min-h-screen px-4 sm:px-6 mt-10 lg:px-8 max-w-7xl mx-auto text-gray-100">
       {/* Header with Add Subject Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold">Study Planner</h1>
+      <div className="flex flex-col justify-between lg:flex-row items-center mb-6 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold self-start">Study Planner</h1>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl w-full sm:w-auto transition transform hover:scale-[1.02] active:scale-100 shadow-md"

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../Auth/AuthContext";
 import Modal from "../../components/Modal";
-import { useAxios } from "../../hooks/useAxios";
 
 const hours = [
   "8 AM", "9 AM", "10 AM", "11 AM",
@@ -16,8 +15,7 @@ const colors = [
 ];
 
 export default function ClassSchedule() {
-  const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const { user, axiosInstance } = useAuth();
   const [classes, setClasses] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState("All Subjects");

@@ -154,7 +154,7 @@ export default function HomePage() {
 
             {/* Quiz Mode Section */}
             <section className="bg-gray-50 dark:bg-gray-800 py-20">
-                <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+                <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-10">
                     {/* Text */}
                     <motion.div
                         initial={{ x: -50, opacity: 0 }}
@@ -195,7 +195,91 @@ export default function HomePage() {
                     </motion.div>
                 </div>
             </section>
+            {/* Why Choose Us Section */}
+            <section className="py-20 max-w-7xl mx-auto px-6">
+                <h2 className="text-3xl font-bold text-center mb-12">Why Choose Campus Pilot?</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {[
+                        {
+                            icon: <Zap className="w-10 h-10 text-yellow-500" />,
+                            title: "Fast & Simple",
+                            desc: "Built for students with zero complexity, get organized in minutes."
+                        },
+                        {
+                            icon: <Target className="w-10 h-10 text-red-500" />,
+                            title: "Goal-Oriented",
+                            desc: "Designed to help you stay focused on exams, deadlines, and personal goals."
+                        },
+                        {
+                            icon: <FileText className="w-10 h-10 text-blue-500" />,
+                            title: "All-in-One",
+                            desc: "No need for 5 different apps — everything you need is here."
+                        }
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.2, duration: 0.6 }}
+                            viewport={{ once: true }}
+                            className="bg-white dark:bg-gray-800 shadow rounded-xl p-6 text-center space-y-4"
+                        >
+                            <div className="flex justify-center">{item.icon}</div>
+                            <h3 className="text-xl font-semibold">{item.title}</h3>
+                            <p className="text-gray-600 dark:text-gray-400">{item.desc}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
 
+            {/* How It Works Section */}
+            <section className="bg-gray-50 dark:bg-gray-800 py-20">
+                <div className="max-w-6xl mx-auto px-6 text-center">
+                    <h2 className="text-3xl font-bold mb-12">Get Started in 3 Easy Steps</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        {[
+                            {
+                                step: "1",
+                                title: "Sign Up Free",
+                                desc: "Create your free account in less than 1 minute."
+                            },
+                            {
+                                step: "2",
+                                title: "Add Your Classes",
+                                desc: "Import or manually add your courses, exams, and schedule."
+                            },
+                            {
+                                step: "3",
+                                title: "Stay Organized",
+                                desc: "Track your progress, reminders, and goals all in one place."
+                            }
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.2, duration: 0.6 }}
+                                className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 space-y-4"
+                            >
+                                <div className="w-12 h-12 flex items-center justify-center mx-auto rounded-full bg-blue-600 text-white text-xl font-bold">
+                                    {item.step}
+                                </div>
+                                <h3 className="text-xl font-semibold">{item.title}</h3>
+                                <p className="text-gray-600 dark:text-gray-400">{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                    <motion.button
+                        onClick={() => navigate("/auth/sign-up")}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="mt-12 px-6 py-3 bg-blue-600 cursor-pointer text-white rounded-lg shadow hover:bg-blue-700 transition"
+                    >
+                        Get Started Now
+                    </motion.button>
+                </div>
+            </section>
             {/* FAQ Section */}
             <section className="py-20 max-w-4xl mx-auto px-6">
                 <div className="mb-10 flex justify-center items-center">

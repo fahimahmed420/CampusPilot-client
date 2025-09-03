@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useAxios } from "../../hooks/useAxios";
 import { useAuth } from "../../Auth/AuthContext";
 import { FaHistory } from "react-icons/fa";
 
@@ -18,8 +17,7 @@ const QAGenerator = () => {
     const [timeElapsed, setTimeElapsed] = useState(0); 
     const timerRef = useRef(null);
 
-    const { user } = useAuth();
-    const axiosInstance = useAxios();
+    const { user, axiosInstance } = useAuth();
 
     const categories = {
         general: 9, books: 10, film: 11, music: 12, theatre: 13,
@@ -165,7 +163,7 @@ const QAGenerator = () => {
 
                 {/* Headline + history toggle */}
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-3xl font-bold text-indigo-400">🎯 QAGenerator</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">QAGenerator</h1>
                     <button
                         onClick={toggleRecords}
                         className="text-indigo-400 hover:text-indigo-200 text-2xl"
@@ -258,7 +256,7 @@ const QAGenerator = () => {
 
                     <button
                         onClick={fetchQuestions}
-                        className="bg-indigo-600 hover:bg-indigo-500 transition px-6 py-2 rounded-lg shadow-md"
+                        className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl w-full sm:w-auto transition transform hover:scale-[1.02] active:scale-100 shadow-md"
                     >
                         Generate
                     </button>

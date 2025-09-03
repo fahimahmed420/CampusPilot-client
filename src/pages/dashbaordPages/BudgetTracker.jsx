@@ -6,14 +6,12 @@ import {
 } from "recharts";
 import { useAuth } from "../../Auth/AuthContext";
 import AddTransactionModal from "../../components/AddTransactionModal";
-import { useAxios } from "../../hooks/useAxios";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const PIE_COLORS = ["#60A5FA", "#34D399", "#F59E0B", "#EF4444", "#A78BFA", "#FBBF24", "#22D3EE", "#F472B6", "#10B981", "#FCA5A5"];
 
 export default function BudgetTracker() {
-  const { user } = useAuth();
-  const axios = useAxios(); // <-- Axios instance
+  const { user, axiosInstance: axios } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(false);
@@ -94,9 +92,9 @@ export default function BudgetTracker() {
   }, [transactions]);
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 mt-6 max-w-7xl mx-auto text-white min-h-screen transition">
+    <div className="px-4 sm:px-6 lg:px-8 mt-10 max-w-7xl mx-auto text-white min-h-screen transition">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Budget Tracker</h1>
         <button
           onClick={() => setModalOpen(true)}
@@ -172,8 +170,8 @@ export default function BudgetTracker() {
               <button
                 key={f}
                 className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === f
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-800 text-gray-200 hover:bg-gray-600"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-800 text-gray-200 hover:bg-gray-600"
                   }`}
                 onClick={() => setFilter(f)}
               >
