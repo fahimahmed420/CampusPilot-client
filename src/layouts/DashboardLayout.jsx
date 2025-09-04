@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaPaperPlane } from "react-icons/fa";
 
 export default function DashboardLayout() {
-    const { user } = useAuth();
+    const { user,logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const dropdownButtonRef = useRef(null);
@@ -189,12 +189,9 @@ export default function DashboardLayout() {
                                         </NavLink>
 
                                         <NavLink
-                                            to="/"
-                                            className={({ isActive }) =>
-                                                `flex items-center gap-2 px-3 py-2 rounded-md transition ${isActive ? "bg-red-500 text-white" : "hover:bg-red-400"
-                                                }`
-                                            }
-                                            onClick={() => setDropdownOpen(false)}
+                                    
+                                            className="flex items-center gap-2 px-3 py-2 rounded-md transition bg-red-400 hover:bg-red-600"
+                                             onClick={logout}
                                         >
                                             <IoMdArrowRoundBack size={18} /> Logout
                                         </NavLink>

@@ -51,7 +51,7 @@ const DashboardPage = () => {
     const loadData = async () => {
         try {
             setLoading(true);
-            await Promise.all([
+            await Promise.allSettled([
                 fetchBalance(),
                 fetchTodayClasses(),
                 fetchRecentScores(),

@@ -1,7 +1,71 @@
 @import "tailwindcss";
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Backgrounds */
+  --bg-page: #ffffff;
+  --bg-section: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-navbar: #60a5fa;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #4b5563;
+  --text-accent: #1d4ed8; /* blue buttons, icons */
+  --text-muted: #6b7280;
+
+  /* Buttons / Highlights */
+  --btn-bg: #3b82f6;
+  --btn-hover: #2563eb;
+  --btn-text: #ffffff;
+
+  /* Accent colors for icons */
+  --icon-blue: #3b82f6;
+  --icon-green: #16a34a;
+  --icon-purple: #7c3aed;
+  --icon-red: #ef4444;
+  --icon-yellow: #facc15;
+}
+
+/* Dark theme overrides */
+.dark {
+  --bg-page: #0f172a;
+  --bg-section: #1f2937;
+  --bg-card: #111827;
+  --bg-navbar: #000000;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #d1d5db;
+  --text-accent: #3b82f6;
+  --text-muted: #9ca3af;
+
+  --btn-bg: #3b82f6;
+  --btn-hover: #2563eb;
+  --btn-text: #ffffff;
+
+  --icon-blue: #3b82f6;
+  --icon-green: #22c55e;
+  --icon-purple: #8b5cf6;
+  --icon-red: #f87171;
+  --icon-yellow: #facc15;
+}
+
+/* Smooth transition */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Apply page-level background and text */
+html, body, #root {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+
 
 @keyframes gradient {
   0% {
