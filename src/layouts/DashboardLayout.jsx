@@ -63,7 +63,7 @@ export default function DashboardLayout() {
     );
 
     return (
-        <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex h-screen bg-[var(--bg-page)]">
             {/* Sidebar always visible */}
             <aside className="bg-black text-white w-48 xl:w-56 flex-col hidden lg:flex">
                 <div className="flex items-center h-16 px-4  py-4 border-b border-gray-700">
@@ -77,7 +77,7 @@ export default function DashboardLayout() {
             {/* Main content */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <header className="bg-white dark:bg-black ">
+                <header className="bg-black">
                     <div className="flex items-center justify-between h-16  px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
                         <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-100">Dashboard</h1>
                         <div className="relative flex items-center gap-3">

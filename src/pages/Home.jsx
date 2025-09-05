@@ -88,7 +88,7 @@ export default function HomePage() {
   return (
     <div className="bg-[var(--bg-page)] text-[var(--text-primary)]">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20 flex flex-col-reverse md:flex-row items-center gap-10 bg-[var(--bg-section)]">
+      <section className="max-w-7xl mx-auto px-6 py-20 flex flex-col-reverse md:flex-row items-center gap-10 ">
         {/* Text */}
         <div className="flex-1 space-y-6">
           <motion.h1
