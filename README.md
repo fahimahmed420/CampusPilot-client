@@ -78,20 +78,21 @@ CampusPilot is a full‑stack web application designed to help students track cl
   .github/
 ```
 
-UI layout example (dashboard):
+### UI layout example (Dashboard)
 
----
-
-## | Navbar: Logo | Dashboard | Tools | Profile     |
-
-\| Sidebar (icons) | Main Content (Dynamic)       |
-\|   📅 Schedule   |                               |
-\|   💰 Budget     |   → Example: Budget Tracker  |
-\|   📖 Planner    |                               |
-\|   ❓ Q\&A Gen    |                               |
-----------------------------------------------------
-
-## | Footer: Student Life Toolkit © 2025            |
+```
+---------------------------------------------------
+| Navbar: Logo | Dashboard | Tools | Profile     |
+---------------------------------------------------
+| Sidebar (icons) | Main Content (Dynamic)       |
+|   📅 Schedule   |                               |
+|   💰 Budget     |   → Example: Budget Tracker  |
+|   📖 Planner    |                               |
+|   ❓ Q&A Gen    |                               |
+---------------------------------------------------
+| Footer: Student Life Toolkit © 2025            |
+---------------------------------------------------
+```
 
 ---
 
