@@ -72,7 +72,7 @@ CampusPilot is a full‑stack web application designed to help students track cl
 
 ```
 /campuspilot
-  /client      # React + TypeScript (Vite)
+  /client      # React + JavaScript (Vite)
   /server      # Express API (Node.js)
   README.md
   .github/
@@ -82,15 +82,15 @@ CampusPilot is a full‑stack web application designed to help students track cl
 
 ```
 ---------------------------------------------------
-| Navbar: Logo | Dashboard | Tools | Profile     |
+| Navbar: Logo | Dashboard | Tools | Profile      |
 ---------------------------------------------------
-| Sidebar (icons) | Main Content (Dynamic)       |
+| Sidebar (icons) | Main Content (Dynamic)        |
 |   📅 Schedule   |                               |
-|   💰 Budget     |   → Example: Budget Tracker  |
+|   💰 Budget     |   → Example: Budget Tracker   |
 |   📖 Planner    |                               |
 |   ❓ Q&A Gen    |                               |
 ---------------------------------------------------
-| Footer: Student Life Toolkit © 2025            |
+| Footer: Student Life Toolkit © 2025              |
 ---------------------------------------------------
 ```
 
@@ -110,7 +110,7 @@ CampusPilot is a full‑stack web application designed to help students track cl
 **Prerequisites**
 
 * Node.js >= 18
-* pnpm or npm
+* npm or pnpm
 * A Firebase project with Auth and Firestore enabled
 * (Optional) AI API key (OpenAI or similar) for enhanced question generation
 
@@ -129,14 +129,14 @@ git clone https://github.com/fahimahmed420/CampusPilot.git
 ```bash
 cd client
 # install
-pnpm install   # or npm install
+npm install   # or pnpm install
 
 # create env file
 cp .env.example .env.local
 # edit .env.local with values (see example below)
 
 # start dev server
-pnpm dev        # or npm run dev
+npm dev        # or pnpm run dev
 ```
 
 **Client env example (.env.local)**
@@ -155,12 +155,12 @@ VITE_AI_API_KEY=optional_ai_api_key
 
 ```bash
 cd server
-pnpm install    # or npm install
+npm install    # or pnpm install
 cp .env.example .env
 # edit .env with values (see example below)
 
 # start dev server
-pnpm dev        # or npm run dev
+npm dev        # or pnpm run dev
 ```
 
 **Server env example (.env)**
@@ -183,19 +183,19 @@ AI_API_KEY=optional_ai_api_key
 
 ```bash
 # client
-pnpm test
-pnpm lint
+npm test
+npm lint
 
 # server
-pnpm test
-pnpm lint
+npm test
+npm lint
 ```
 
 ---
 
 ## ☁️ Deployment
 
-* Client: Vercel / Netlify / Firebase Hosting (build with `pnpm build`)
+* Client: Vercel / Netlify / Firebase Hosting (build with `npm build`)
 * Server: Vercel Serverless / Heroku / Render / Cloud Run
 * Use environment variables in your platform’s dashboard for secrets.
 

@@ -35,18 +35,15 @@ const DashboardPage = () => {
             setIsDarkMode(document.documentElement.classList.contains("dark"));
         });
         observer.observe(document.documentElement, { attributes: true });
-        // initial value
         setIsDarkMode(document.documentElement.classList.contains("dark"));
         return () => observer.disconnect();
     }, []);
-
 
     useEffect(() => {
         if (user?.uid && axios.defaults.headers.common["Authorization"]) {
             loadData();
         }
     }, [user, axios]);
-
 
     const loadData = async () => {
         try {
@@ -94,41 +91,43 @@ const DashboardPage = () => {
     };
 
     const SkeletonCard = () => (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow animate-pulse">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded w-1/2 mb-2"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+        <div className="p-4 rounded-xl shadow animate-pulse bg-[var(--bg-section)]">
+            <div className="h-4 rounded w-1/3 mb-4 bg-[var(--text-muted)]/30"></div>
+            <div className="h-6 rounded w-1/2 mb-2 bg-[var(--text-muted)]/40"></div>
+            <div className="h-4 rounded w-1/4 bg-[var(--text-muted)]/30"></div>
         </div>
     );
 
     if (error) {
         return (
             <div className="flex justify-center items-center h-64">
-                <p className="text-red-500 dark:text-red-400">{error}</p>
+                <p className="text-[var(--icon-red)]">{error}</p>
             </div>
         );
     }
 
     return (
         <div className="p-6 space-y-6 px-4 sm:px-6 lg:px-8 mt-10 max-w-7xl mx-auto min-h-screen">
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center">
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2 md:mb-0">
+                <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2 md:mb-0">
                     Overview
                 </h1>
                 <button
                     onClick={loadData}
-                    className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 flex items-center gap-2 text-sm"
+                    className="flex items-center gap-2 text-sm text-[var(--text-accent)] hover:text-[var(--btn-hover)]"
                 >
                     <RefreshCw className="w-4 h-4" /> Refresh
                 </button>
             </div>
 
             {lastUpdated && (
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-[var(--text-muted)]">
                     Last updated: {lastUpdated.toLocaleTimeString()}
                 </p>
             )}
 
+            {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {loading ? (
                     <>
@@ -144,20 +143,20 @@ const DashboardPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
-                            className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl hover:scale-[1.02] transition-all"
+                            className="p-4 rounded-xl shadow bg-[var(--bg-section)] hover:shadow-xl hover:scale-[1.02] transition-all"
                         >
-                            <h2 className="text-gray-600 text-2xl dark:text-gray-300 mb-2">Balance</h2>
-                            <p className="text-6xl font-bold text-gray-800 dark:text-gray-100">
+                            <h2 className="text-2xl mb-2 text-[var(--text-secondary)]">Balance</h2>
+                            <p className="text-6xl font-bold text-[var(--text-primary)]">
                                 ${balance.toFixed(2)}
                             </p>
                             {lastTransaction && (
                                 <div className="flex items-center mt-4">
                                     {lastTransaction.type === "income" ? (
-                                        <ArrowUpIcon className="w-4 h-4 text-green-500" />
+                                        <ArrowUpIcon className="w-4 h-4 text-[var(--icon-green)]" />
                                     ) : (
-                                        <ArrowDownIcon className="w-4 h-4 text-red-500" />
+                                        <ArrowDownIcon className="w-4 h-4 text-[var(--icon-red)]" />
                                     )}
-                                    <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                    <span className="ml-2 text-[var(--text-secondary)]">
                                         ${lastTransaction.amount}
                                     </span>
                                 </div>
@@ -169,23 +168,23 @@ const DashboardPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl hover:scale-[1.02] transition-all"
+                            className="p-4 rounded-xl shadow bg-[var(--bg-section)] hover:shadow-xl hover:scale-[1.02] transition-all"
                         >
-                            <h2 className="text-gray-600 text-2xl dark:text-gray-300 mb-2">Today's Schedule</h2>
+                            <h2 className="text-2xl mb-2 text-[var(--text-secondary)]">Today's Schedule</h2>
                             {todayClasses.length > 0 ? (
                                 todayClasses.map(cls => (
                                     <div key={cls.id} className="flex items-center mb-2">
-                                        <span
-                                            className={`w-4 h-4 rounded-sm mr-2 ${cls.color}`}
-                                        ></span>
+                                        <span className={`w-4 h-4 rounded-sm mr-2 ${cls.color}`} />
                                         <div>
-                                            <p className="font-semibold text-gray-800 dark:text-gray-100">{cls.subject}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">{cls.time}</p>
+                                            <p className="font-semibold text-[var(--text-primary)]">
+                                                {cls.subject}
+                                            </p>
+                                            <p className="text-sm text-[var(--text-muted)]">{cls.time}</p>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-gray-400 text-sm flex items-center dark:text-gray-500">
+                                <p className="text-sm flex items-center text-[var(--text-muted)]">
                                     <Inbox className="w-4 h-4 mr-1" /> No classes today
                                 </p>
                             )}
@@ -196,17 +195,17 @@ const DashboardPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl hover:scale-[1.02] transition-all"
+                            className="p-4 rounded-xl shadow bg-[var(--bg-section)] hover:shadow-xl hover:scale-[1.02] transition-all"
                         >
-                            <h2 className="text-gray-600 dark:text-gray-300 text-2xl mb-2">Recent Quiz Scores</h2>
+                            <h2 className="text-2xl mb-2 text-[var(--text-secondary)]">Recent Quiz Scores</h2>
                             {recentScores.length > 0 ? (
                                 recentScores.map((score, index) => (
-                                    <p key={index} className="text-gray-700 dark:text-gray-200 mb-1">
+                                    <p key={index} className="mb-1 text-[var(--text-primary)]">
                                         {score.subject}:{" "}
                                         <span
                                             className={`px-2 py-1 text-xs rounded-full ${score.score / score.total >= 0.7
-                                                ? "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-100"
-                                                : "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-100"
+                                                ? "bg-[var(--icon-green)]/20 text-[var(--icon-green)]"
+                                                : "bg-[var(--icon-red)]/20 text-[var(--icon-red)]"
                                                 }`}
                                         >
                                             {score.score}/{score.total}
@@ -214,7 +213,7 @@ const DashboardPage = () => {
                                     </p>
                                 ))
                             ) : (
-                                <p className="text-gray-400 text-sm flex items-center dark:text-gray-500">
+                                <p className="text-sm flex items-center text-[var(--text-muted)]">
                                     <Inbox className="w-4 h-4 mr-1" /> No quiz records
                                 </p>
                             )}
@@ -225,30 +224,30 @@ const DashboardPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7 }}
-                            className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-xl hover:scale-[1.02] transition-all"
+                            className="p-4 rounded-xl shadow bg-[var(--bg-section)] hover:shadow-xl hover:scale-[1.02] transition-all"
                         >
-                            <h2 className="text-gray-600 dark:text-gray-300 mb-2">Weekly Study Hours</h2>
+                            <h2 className="mb-2 text-[var(--text-secondary)]">Weekly Study Hours</h2>
                             <div className="h-48">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={weeklyHours}>
                                         <defs>
                                             <linearGradient id="colorUvLight" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.2} />
+                                                <stop offset="5%" stopColor="var(--icon-blue)" stopOpacity={0.8} />
+                                                <stop offset="95%" stopColor="var(--icon-blue)" stopOpacity={0.2} />
                                             </linearGradient>
                                             <linearGradient id="colorUvDark" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.9} />
-                                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                                <stop offset="5%" stopColor="var(--icon-blue)" stopOpacity={0.9} />
+                                                <stop offset="95%" stopColor="var(--icon-blue)" stopOpacity={0.3} />
                                             </linearGradient>
                                         </defs>
 
-                                        <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? "#374151" : "#d1d5db"} />
-                                        <XAxis dataKey="day" stroke={isDarkMode ? "#9ca3af" : "#6b7280"} />
-                                        <YAxis stroke={isDarkMode ? "#9ca3af" : "#6b7280"} />
+                                        <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? "var(--text-muted)" : "#d1d5db"} />
+                                        <XAxis dataKey="day" stroke="var(--text-muted)" />
+                                        <YAxis stroke="var(--text-muted)" />
                                         <Tooltip
                                             contentStyle={{
-                                                backgroundColor: isDarkMode ? "#1f2937" : "#fff",
-                                                color: isDarkMode ? "#f9fafb" : "#111827",
+                                                backgroundColor: "var(--bg-card)",
+                                                color: "var(--text-primary)",
                                                 borderRadius: "6px",
                                                 border: "none",
                                                 padding: "6px 12px"
@@ -261,7 +260,6 @@ const DashboardPage = () => {
                                         />
                                     </BarChart>
                                 </ResponsiveContainer>
-
                             </div>
                         </motion.div>
                     </>

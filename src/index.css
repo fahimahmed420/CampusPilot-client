@@ -11,6 +11,7 @@
   --bg-section: #f9fafb;
   --bg-card: #ffffff;
   --bg-navbar: #60a5fa;
+  
 
   /* Text */
   --text-primary: #0f172a;
@@ -29,6 +30,12 @@
   --icon-purple: #7c3aed;
   --icon-red: #ef4444;
   --icon-yellow: #facc15;
+
+  /* modal */
+    --modal-bg: #ffffff;      /* modal panel background (light) */
+  --input-bg: #f9fafb;      /* input field background (light) */
+  --input-border: #d1d5db;  /* light border */
+  --input-text: #111827;    /* dark text */
 }
 
 /* Dark theme overrides */
@@ -37,6 +44,7 @@
   --bg-section: #1f2937;
   --bg-card: #111827;
   --bg-navbar: #000000;
+  
 
   --text-primary: #f8fafc;
   --text-secondary: #d1d5db;
@@ -52,6 +60,11 @@
   --icon-purple: #8b5cf6;
   --icon-red: #f87171;
   --icon-yellow: #facc15;
+
+  --modal-bg: #1f2937;      /* modal panel background (dark) */
+  --input-bg: #374151;      /* input field background (dark) */
+  --input-border: #4b5563;  /* dark border */
+  --input-text: #f9fafb;    /* light text */
 }
 
 /* Smooth transition */

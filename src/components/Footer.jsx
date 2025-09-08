@@ -1,21 +1,25 @@
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub, FaPaperPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-50 dark:bg-black text-gray-300 py-20">
       <div className="container max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6">
-        
+
         {/* Logo with animation */}
-        <motion.h1
-          className="text-2xl font-bold text-white"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          whileHover={{ scale: 1.1, color: "#3B82F6" }}
-        >
-          Campus Pilot
-        </motion.h1>
+        <Link to={"/"}>
+          <motion.h1
+            className="text-2xl font-bold text-white flex gap-2 items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            whileHover={{ scale: 1.1, color: "#3B82F6" }}
+          >
+            <FaPaperPlane size={24}/>
+            Campus Pilot
+          </motion.h1>
+        </Link>
 
         {/* Social Icons */}
         <div className="flex space-x-6 mt-4 md:mt-0">
