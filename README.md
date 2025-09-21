@@ -2,7 +2,7 @@
 
 **CampusPilot — Your Student Life Co-Pilot**
 
-CampusPilot is a full‑stack web application designed to help students track class schedules, manage budgets, prepare for exams, and plan study sessions — all in one place. It includes **Pulse Mode**, a one‑click daily agenda generator that blends classes, urgent tasks, and focused Pomodoro sessions into a smart plan.
+CampusPilot is a full‑stack web application designed to help students track class schedules, manage budgets, prepare for exams, and plan study sessions — all in one place. 
 
 ---
 
@@ -13,32 +13,24 @@ CampusPilot is a full‑stack web application designed to help students track cl
 * Add, edit, and delete classes (subject, day, time, instructor).
 * Color coding per subject.
 * Weekly calendar view.
-* Optional export to **.ics** (calendar format).
 
 ### 2. Budget Tracker
 
 * Track income (allowance, scholarship, part‑time job).
 * Track expenses (food, transport, books, entertainment).
 * Charts & graphs: monthly pie chart, income vs expense bar chart, trend line.
-* **SpendGuard Alert** warns when you’re trending toward overspending.
 
 ### 3. Exam Q\&A Generator
 
 * Generate practice questions: MCQs, short answers, and true/false.
 * Choose difficulty: Easy, Medium, Hard.
-* AI‑powered through an LLM API (if available) with a fallback offline generator.
+* Genarate Questions using Trivia question database.
 * Quiz mode with scoring and history tracking.
 
 ### 4. Study Planner
 
 * Break large goals into tasks with subject, topic, priority, and deadline.
-* Drag & drop tasks onto the weekly schedule.
 * Priority badges and overdue highlights.
-
-### 5. Pulse Mode (Unique)
-
-* Builds a Pomodoro‑style agenda for the day using classes, urgent tasks, and budget reminders.
-* Automatically inserts short breaks and long breaks.
 
 ---
 
@@ -48,23 +40,19 @@ CampusPilot is a full‑stack web application designed to help students track cl
 
 * React + TypeScript (Vite)
 * React Router
-* Zustand (state management)
-* React Query (data & cache)
-* Tailwind CSS + shadcn/ui
+* Tailwind CSS 
 * Recharts (visualizations)
 
 **Backend**
 
 * Node.js + Express
 * Firebase Admin SDK (server side authentication verification)
-* Firestore (database)
-* Zod (validation)
+* MongoDB (database)
 
 **Other**
 
 * Firebase Authentication (Email/Password, Google Sign‑In)
 * Firebase ID tokens for auth (verified on server)
-* Optional AI API (OpenAI, etc.) for question generation
 
 ---
 
@@ -100,7 +88,6 @@ CampusPilot is a full‑stack web application designed to help students track cl
 
 * Firebase Auth secures user access.
 * Firestore security rules scoped per user document.
-* Zod validation on both client and server.
 * Server verifies Firebase ID tokens using Firebase Admin SDK.
 
 ---
@@ -112,7 +99,6 @@ CampusPilot is a full‑stack web application designed to help students track cl
 * Node.js >= 18
 * npm or pnpm
 * A Firebase project with Auth and Firestore enabled
-* (Optional) AI API key (OpenAI or similar) for enhanced question generation
 
 ### 1. Clone the repo
 
@@ -195,28 +181,14 @@ npm lint
 
 ## ☁️ Deployment
 
-* Client: Vercel / Netlify / Firebase Hosting (build with `npm build`)
-* Server: Vercel Serverless / Heroku / Render / Cloud Run
+* Client: Firebase Hosting (build with `npm build`)
+* Server: Vercel Serverless 
 * Use environment variables in your platform’s dashboard for secrets.
-
----
-
-## 🔁 Data export / import
-
-* Schedule exports: `.ics` generation is available from the client and server endpoints.
-* Budget and planner data can be exported/imported as JSON.
-
----
-
-## 🧪 Fallback offline features
-
-* Q\&A generator uses the AI API when available; if not, a deterministic fallback generator produces questions from saved templates so the app remains usable offline.
 
 ---
 
 ## 🧩 Extensibility ideas
 
-* Integrate campus maps & room locations.
 * Add shared study groups & collaborative Pomodoros.
 * Add optional Google Calendar sync.
 
@@ -228,22 +200,10 @@ Feel free to open issues and PRs. Follow the repo’s contributing guidelines an
 
 ---
 
-## 📷 Screenshots
-
-*(Place screenshots under `/client/public/screenshots` and reference them here.)*
-
-* Dashboard
-* Schedule Tracker
-* Budget Charts
-* Q\&A Generator
-* Study Planner
-* Pulse Mode Timer
-
----
 
 ## 📝 License
 
-MIT © 2025 Fahim Ahmed
+© 2025 Fahim Ahmed
 
 ---
 
