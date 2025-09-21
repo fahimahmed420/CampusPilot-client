@@ -1,6 +1,6 @@
 # CampusPilot
 
-Live Link : [https://github.com/fahimahmed420/CampusPilot-client.git client](https://campus-pilot-24c9b.web.app/)
+Live Link : [https://campus-pilot-24c9b.web.app/](https://campus-pilot-24c9b.web.app/)
 
 **CampusPilot — Your Student Life Co-Pilot**
 
@@ -108,8 +108,6 @@ CampusPilot is a full‑stack web application designed to help students track cl
 # if project contains separate client & server repos, clone both
 git clone https://github.com/fahimahmed420/CampusPilot-client.git client
 git clone https://github.com/fahimahmed420/CampusPilot-server.git server
-# OR if mono-repo
-git clone https://github.com/fahimahmed420/CampusPilot.git
 ```
 
 ### 2. Client: install & run
