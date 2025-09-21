@@ -1,5 +1,7 @@
 # CampusPilot
 
+Live Link : [https://github.com/fahimahmed420/CampusPilot-client.git client](https://campus-pilot-24c9b.web.app/)
+
 **CampusPilot — Your Student Life Co-Pilot**
 
 CampusPilot is a full‑stack web application designed to help students track class schedules, manage budgets, prepare for exams, and plan study sessions — all in one place. 
