@@ -69,7 +69,7 @@ export default function Navbar() {
             className={`sticky top-0 z-50 transition-all duration-300 ${
                 isScrolled
                     ? "bg-black/90 backdrop-blur-md shadow-md"
-                    : "bg-transparent dark:bg-transparent"
+                    : "bg-transparent dark:bg-transparent shadow"
             }`}
             aria-label="Main Navigation"
         >
@@ -146,20 +146,20 @@ export default function Navbar() {
                                             animate="visible"
                                             exit="exit"
                                             transition={{ duration: 0.2 }}
-                                            className="absolute right-0 mt-2 w-44 bg-gray-900 text-white shadow-lg rounded-lg py-2 backdrop-blur-md bg-opacity-90 transition-colors duration-300"
+                                            className="absolute right-0 mt-2 w-44 px-2 bg-black text-white shadow-lg rounded-lg py-2 backdrop-blur-md bg-opacity-90 transition-colors duration-300"
                                         >
-                                            <p className="px-4 py-2 border-b border-gray-700">
+                                            <p className="px-4 py-2 border-b border-gray-300">
                                                 {displayName}
                                             </p>
                                             <Link
                                                 to="/dashboard/home"
-                                                className="block px-4 py-2 hover:bg-gray-800"
+                                                className="block px-4 py-2 hover:bg-blue-500 rounded-xl my-2"
                                             >
                                                 Dashboard
                                             </Link>
                                             <button
                                                 onClick={logout}
-                                                className="w-full text-left px-4 py-2 hover:bg-gray-800"
+                                                className="w-full rounded-xl text-left px-4 py-2 hover:bg-red-500 cursor-pointer"
                                             >
                                                 Logout
                                             </button>

@@ -134,7 +134,7 @@ export default function ClassSchedule() {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="bg-[var(--card-bg)] p-2 rounded-lg w-full sm:w-auto"
+          className="bg-[var(--bg-section)] shadow p-2 rounded-lg w-full sm:w-auto"
         >
           <option>All Subjects</option>
           {[...new Set(classes.map((c) => c.subject))].map((s) => (
